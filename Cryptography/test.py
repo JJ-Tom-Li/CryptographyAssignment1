@@ -1,18 +1,17 @@
 from genFile.genFile import genSizeFile
-from RSA2048.PyCrypto_RSA_2048 import *
-from AES256CBC.PyCrypto_AES_256_CBC import AES_CBC_Cipher
-from AES256ECB.PyCrypto_AES_256_ECB import AES_ECB_Cipher
-from AES256CTR.PyCrypto_AES_256_CTR import AES_CTR_Cipher
-from RSA2048.PyCrypto_RSA_2048 import RSA_2048_Cipher
-from SHA512.PyCrypto_SHA_512 import SHA_512_Cipher
+from AES256CBC.Cryptography_AES_256_CBC import AES_CBC_Cipher
+from AES256ECB.Cryptography_AES_256_ECB import AES_ECB_Cipher
+from AES256CTR.Cryptography_AES_256_CTR import AES_CTR_Cipher
+from RSA2048.Cryptography_RSA_2048 import RSA_2048_Cipher
+from SHA512.Cryptography_SHA_512 import SHA_512_Cipher
 from Crypto.Random import get_random_bytes
 import os
 import sys
 import time
 
 #generate a file
-filename = "1MB+7byte"
-genSizeFile(filename,1*1000*1000+7)
+filename = "16MB+7byte"
+genSizeFile(filename,16*1000*1000+7)
 print("File generate done.")
 
 #encrypt and decrypt with AES 256 CBC
@@ -58,7 +57,7 @@ with open("AES256ECB/"+filename+"_encryptedByAES256ECB.txt","wb") as f2:
 	
 	#generate key
 	key=get_random_bytes(16)
-
+	iv=get_random_bytes(16)
 	print("AES-256-ECB encryption start:")
 	start = time.time()
 
@@ -91,12 +90,12 @@ with open("AES256CTR/"+filename+"_encryptedByAES256CTR.txt","wb") as f3:
 	
 	#generate key
 	key=get_random_bytes(16)
-
+	count=get_random_bytes(16)
 	print("AES-256-CTR encryption start:")
 	start = time.time()
 
 	#encrypt
-	ciphertext = AES_CTR_Cipher(key).encrypt(data)
+	ciphertext = AES_CTR_Cipher(key,count).encrypt(data)
 
 	end = time.time()	
 	print("AES-256-CTR encryption end.")
@@ -109,7 +108,7 @@ with open("AES256CTR/"+filename+"_encryptedByAES256CTR.txt","wb") as f3:
 	start = time.time()
 
 	#decrypt
-	plaintext = AES_CTR_Cipher(key).decrypt(ciphertext)
+	plaintext = AES_CTR_Cipher(key,count).decrypt(ciphertext)
 
 	end = time.time()	
 	print("AES-256-CTR decryption end.")
@@ -167,3 +166,4 @@ with open("SHA512/"+filename+"_encryptedBySHA512.txt","w") as f5:
 
 	f5.write(ciphertext)
 print("SHA512 done.")
+

@@ -36,9 +36,6 @@ class RSA_2048_Cipher:
 		cipher_rsa = PKCS1_OAEP.new(public_key)
 		ciphertext=[]
 		
-		#Padding the data
-		#data = pad(data,buffer_size)
-		
 		#Get the length of input data
 		data_size = len(data)
 		
